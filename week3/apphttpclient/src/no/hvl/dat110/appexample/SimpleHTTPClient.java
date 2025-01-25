@@ -10,7 +10,7 @@ public class SimpleHTTPClient {
 
 	public static void main(String[] args) throws Exception {
 
-		System.out.print("URL:> ");
+		System.out.print("URL:>  ");
 
 		Scanner scanner = new Scanner(System.in);
 		String url = scanner.nextLine();
