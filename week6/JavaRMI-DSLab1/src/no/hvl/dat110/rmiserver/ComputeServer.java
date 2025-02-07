@@ -8,13 +8,14 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 //import java.rmi.server.UnicastRemoteObject;
+import java.rmi.server.UnicastRemoteObject;
 
 import no.hvl.dat110.rmiinterface.ComputeInterface;
 
 
 public class ComputeServer {
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 
 		
 		try {
@@ -22,14 +23,24 @@ public class ComputeServer {
 			Registry registry = LocateRegistry.createRegistry(9000);
 			
 			// Make a new instance of the implementation class
-			ComputeInterface stub = new ComputeImpl();
+			ComputeImpl stub = new ComputeImpl();
 			
 			//Export the object of implementation class (remote object)
 			//ComputeInterface stub = (ComputeInterface) UnicastRemoteObject.exportObject(comp1, 0);
 			
-			// bind the remote object (stub) in the registry			
+			// bind the remote object (stub) in the registry		
 			registry.bind("ComputeInterface", stub);
+			
 			System.out.println("Compute RPCServer is ready");
+
+			while (!stub.getIsStopped()) {
+				Thread.sleep(1000);
+			}
+			
+			System.out.println("RPCServer is stopping");
+			
+			UnicastRemoteObject.unexportObject(stub, true);
+			System.exit(0);
 			
 		}catch(RemoteException | AlreadyBoundException e) {
 			System.err.println("Compute RPCServer: "+e.getMessage());

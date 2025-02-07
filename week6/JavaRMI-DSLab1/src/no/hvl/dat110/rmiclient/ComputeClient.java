@@ -21,7 +21,7 @@ import no.hvl.dat110.rmiinterface.ComputeInterface;
 public class ComputeClient {
 	
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 
 		
 		try {
@@ -40,6 +40,13 @@ public class ComputeClient {
 			
 			int sum = ci.addNumbers(a, b);
 			System.out.println("Sum of "+a+" and "+b+" = "+ sum);
+			
+			ci.halt();
+			
+			while(true) {
+				Thread.sleep(5000);
+				System.out.println("I'm still standin");
+			}
 			
 		} catch(RemoteException | NotBoundException e) {
 			System.err.println("Error in RMI "+e.getMessage());

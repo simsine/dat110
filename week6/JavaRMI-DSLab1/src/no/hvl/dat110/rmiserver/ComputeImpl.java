@@ -1,6 +1,7 @@
 package no.hvl.dat110.rmiserver;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import no.hvl.dat110.rmiinterface.ComputeInterface;
@@ -12,7 +13,12 @@ import no.hvl.dat110.rmiinterface.ComputeInterface;
  */
 
 public class ComputeImpl extends UnicastRemoteObject implements ComputeInterface {
-
+	
+	public boolean isStopped = false;
+	
+	public boolean getIsStopped() {
+		return isStopped;
+	}
 
 	/**
 	 * 
@@ -29,13 +35,16 @@ public class ComputeImpl extends UnicastRemoteObject implements ComputeInterface
 		int sum = a + b;
 		
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(1000);
 		}catch(InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		return sum;
 	}
-
-
+	
+	@Override
+	public void halt() throws RemoteException {
+		this.isStopped = true;
+	}
 }
